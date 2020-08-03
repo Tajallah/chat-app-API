@@ -1,5 +1,6 @@
 'use strict'
-const NodeRSA = require('node-rsa')
+//const NodeRSA = require('node-rsa')
+const VerifyKey = require('./rsa/verifyKey')
 const simple = require('./handlers/simple')
 const configured = require('./handlers/configured')
 const database = require('./dataLayer/database')
@@ -24,10 +25,6 @@ module.exports = function (app, opts) {
         res.send(err)
       })
   })
-
-  /*  app.get('/verifyKey', (req, res) => {
-
-  })*/
 
   //POSTS
   app.post('/registerUser', (req, res) => {
@@ -63,3 +60,36 @@ module.exports = function (app, opts) {
     })
   })
 }
+
+app.post('/newmsg', (req, res) => {
+  const msgObj = req.body
+  PersonaModel.findOne({publicKey:msgObj.identity}, (err, data) => {
+    if (data != null) {
+      if (verifyKey(msgObj) === true) {
+        let msg = new PostModel({
+          header: msgObj.header,
+          identity: msgObj.identity,
+          body: msgObj.body,
+          timestamp: msgObj.timeStamp
+        })
+        msg.save()
+          .then(doc => {
+            res.send(doc)
+          })
+          .catch(err => {
+            res.send(err)
+          })
+      } else {
+        res.send({
+          success:false,
+          error:"invalid signature"
+        })
+      }
+  } else {
+    res.send({
+      success:false,
+      error:"no such user"
+    })
+  }
+  })
+})
