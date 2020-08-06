@@ -1,1 +1,1 @@
-Next Step: Need a client to generate keys and send messages for testing of the post method.
+Did a dumb. Need to have a signature instead of an encrypted header for messages.

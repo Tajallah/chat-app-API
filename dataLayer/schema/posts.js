@@ -1,10 +1,10 @@
 let mongoose = require('mongoose')
 
 let postSchema = new mongoose.Schema({
-  header: {
-    type:String
+  signature: {
+    type:String,
     required:true
-  }
+  },
   identity: {
     type:String,
     required:true
@@ -16,7 +16,7 @@ let postSchema = new mongoose.Schema({
   timeStamp: {
     type:Date,
     required:true,
-    default:Date.now,
+    default:Date.now
   }
 })
 

@@ -1,11 +1,12 @@
 NodeRSA = require('node-rsa')
 
-function verifyKey(msgObj) {
+module.exports.verifyKey = function (msgObj) {
   const key = new NodeRSA()
-  key.importKey(msgObj.identity, openssh)
-  decryptedHeader = key.decrypt(encrypted, 'utf8')
-  msgString = body.concat(timestamp.toString())
-  if (msgString === decryptedHeader) ? return true:return false
+  console.log(msgObj)
+  key.importKey(msgObj.identity, 'openssh-public')
+  if (key.verify(message.signature)){
+    return true
+  } else {
+    return false
+  }
 }
-
-export default verifyKey;
